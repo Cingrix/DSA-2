@@ -1,0 +1,163 @@
+#include <stdio.h>
+#include<stdlib.h>
+
+struct node
+{
+    int digit;
+    struct node *next;
+};
+
+struct node* reverse(struct node *head)
+{
+    struct node *current, *prev, *temp;
+    temp=NULL;
+    current=head;
+    prev=NULL;
+    while(current!=NULL)
+    {
+        temp=current->next;
+        current->next=prev;
+        prev=current;
+        current=temp;
+    }
+    head=prev;
+    return head;
+}
+
+struct node *create(struct node *head)
+{
+    int n;
+    struct node *temp;
+    temp=head;
+    printf("Enter the digits of the number: ");
+    scanf("%d",&n);
+    while(n<=9&&n>=0)
+    {
+        struct node *newnode=(struct node *)malloc(sizeof(struct node));
+        newnode->digit=n;
+        if(head==NULL)
+        {
+            head=newnode;
+            head->next=NULL;
+            temp=head;
+        }
+        else
+        {
+            temp->next=newnode;
+            temp=newnode;
+            temp->next=NULL;
+        }
+        printf("Enter the next digit or any negative number to terminate: ");
+        scanf("%d",&n);
+    }
+    return head;
+}
+
+struct node *add_poly(struct node *head1,struct node *head2)
+{
+    int carry=0,temp;
+    struct node *p1,*p2,*p3,*head3;
+    p1=head1;
+    p2=head2;
+    while(p1!=NULL||p2!=NULL)
+    {
+        struct node *newnode=(struct node*)malloc(sizeof(struct node));
+        newnode->digit=p1->digit+p2->digit+carry;
+        temp=newnode->digit;
+        newnode->digit=temp%10;
+        while(temp>0)
+        {
+            carry=temp%10;
+            temp=temp/10;
+        }
+        if(p1==head1&&p2==head2)
+        {
+            head3=newnode;
+            p3=head3;
+            p3->next=NULL;
+        }
+        else
+        {
+            p3->next=newnode;
+            p3=newnode;
+            p3->next=NULL;
+        }
+        p1=p1->next;
+        p2=p2->next;
+    }
+    printf("^^\n");
+    while(p1!=NULL&&p2==NULL)
+    {
+        struct node *newnode=(struct node*)malloc(sizeof(struct node));
+        newnode->digit=p1->digit+carry;
+        temp=newnode->digit;
+        newnode->digit=temp%10;
+        while(temp>0)
+        {
+            carry=temp%10;
+            temp=temp/10;
+        }
+        p3->next=newnode;
+        p3=newnode;
+        p3->next=NULL;
+    }
+    while(p2!=NULL&&p1==NULL)
+    {
+        struct node *newnode=(struct node*)malloc(sizeof(struct node));
+        newnode->digit=p2->digit+carry;
+        temp=newnode->digit;
+        newnode->digit=temp%10;
+        while(temp>0)
+        {
+            carry=temp%10;
+            temp=temp/10;
+        }
+        p3->next=newnode;
+        p3=newnode;
+        p3->next=NULL;
+    }
+    if(carry>0)
+    {
+        struct node *newnode=(struct node*)malloc(sizeof(struct node));
+        newnode->digit=carry;
+        p3->next=newnode;
+        p3=newnode;
+        p3->next=NULL;
+    }   
+    return head3;
+}
+
+struct node *display(struct node *head)
+{
+    struct node *temp;
+    temp=head;
+    while(temp!=NULL)
+    {
+        printf("%d",temp->digit);
+        temp=temp->next;        
+    }
+    printf("\n");
+}
+
+int main()
+{
+    struct node *num1,*num2;
+    num1=NULL;
+    num2=NULL;
+    printf("Enter the first number:-\n");
+    num1=create(num1);
+    printf("Enter the second number:-\n");
+    num2=create(num2);
+    printf("The first no is:\n");
+    display(num1);
+    printf("The second no is:\n");
+    display(num2);
+    num1=reverse(num1);
+    num2= reverse(num2);
+    struct node *result;
+    result=NULL;
+    result=add_poly(num1,num2);
+    result=reverse(result);
+    printf("The Sumation result is: ");
+    display(result);
+}
