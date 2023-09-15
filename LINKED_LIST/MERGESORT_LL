@@ -1,0 +1,116 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+
+struct Node* merge(struct Node* left, struct Node* right) {
+    struct Node* result = NULL;
+
+    if (left == NULL) {
+        return right;
+    }
+    if (right == NULL) {
+        return left;
+    }
+
+    if (left->data <= right->data) {
+        result = left;
+        result->next = merge(left->next, right);
+    } else {
+        result = right;
+        result->next = merge(left, right->next);
+    }
+
+    return result;
+}
+
+
+void mergeSort(struct Node** headRef) {
+    struct Node* head = *headRef;
+    struct Node* left;
+    struct Node* right;
+
+    if (head == NULL || head->next == NULL) {
+        return; 
+    }
+
+    struct Node* slow = head;
+    struct Node* fast = head->next;
+
+    while (fast != NULL) {
+        fast = fast->next;
+        if (fast != NULL) {
+            slow = slow->next;
+            fast = fast->next;
+        }
+    }
+
+    left = head;
+    right = slow->next;
+    slow->next = NULL; 
+
+ 
+    mergeSort(&left);
+    mergeSort(&right);
+
+    
+    *headRef = merge(left, right);
+}
+
+
+void append(struct Node** headRef, int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+
+    if (*headRef == NULL) {
+        *headRef = newNode;
+        return;
+    }
+
+    struct Node* current = *headRef;
+    while (current->next != NULL) {
+        current = current->next;
+    }
+
+    current->next = newNode;
+}
+
+
+void printList(struct Node* node) {
+    while (node != NULL) {
+        printf("%d -> ", node->data);
+        node = node->next;
+    }
+    printf("NULL\n");
+}
+
+int main() {
+    struct Node* head = NULL;
+    int x,flag=1;
+
+    while(flag!=0)
+    {
+        printf("Enter the element to be inserted in the linked list:\n");
+        scanf("%d",&x);
+        append(&head, x);
+        printf("Enter 1 to continue or 0 to stop.\n");
+        scanf("%d",&flag);
+    }
+
+    printf("Original Linked List: ");
+    printList(head);
+
+   
+    mergeSort(&head);
+
+    printf("Sorted Linked List: ");
+    printList(head);
+
+    return 0;
+}
