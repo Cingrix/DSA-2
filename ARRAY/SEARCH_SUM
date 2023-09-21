@@ -1,0 +1,85 @@
+#include<stdio.h>
+
+void merge(int arr[], int left[], int left_size, int right[], int right_size) {
+    int i = 0, j = 0, k = 0;
+
+    while (i < left_size && j < right_size) {
+        if (left[i] <= right[j]) {
+            arr[k++] = left[i++];
+        } else {
+            arr[k++] = right[j++];
+        }
+    }
+
+    while (i < left_size) {
+        arr[k++] = left[i++];
+    }
+
+    while (j < right_size) {
+        arr[k++] = right[j++];
+    }
+}
+
+void mergeSort(int arr[], int size) {
+    if (size < 2) {
+        return; 
+    }
+
+    int mid = size / 2;
+    int left[mid];
+    int right[size - mid];
+
+    for (int i = 0; i < mid; i++) {
+        left[i] = arr[i];
+    }
+    for (int i = mid; i < size; i++) {
+        right[i - mid] = arr[i];
+    }
+
+    
+    mergeSort(left, mid);
+    mergeSort(right, size - mid);
+
+   
+    merge(arr, left, mid, right, size - mid);
+}
+
+int binary_search(int arr[],int l,int r,int x)
+{
+    while(l<=r)
+    {
+        int m=(l+r)/2;
+        if(arr[m]==x)
+            return arr[m];
+        if(arr[m]<x)
+            l=m+1;
+        else
+            r=m-1;
+    }
+    return -1;
+}
+
+int main()
+{
+    int size,sum,flag=0,i;
+    printf("Enter the size of the array: ");
+    scanf("%d",&size);
+    int arr[size];
+    printf("Enter the elemnts of the array: ");
+    for(int i=0;i<size;i++)
+        scanf("%d",&arr[i]);
+    mergeSort(arr,size);
+    printf("Enter the sumation of the elements: ");
+    scanf("%d",&sum);
+    for(i=0;i<size;i++)
+    {
+        int search=sum-arr[i];
+        flag=binary_search(arr,0,size-1,search);
+        if(flag!=-1)
+            break;
+    }
+    if(flag!=-1)
+        printf("The integers are %d and %d whose sumation is %d.",arr[i],flag,sum);
+    else
+        printf("The integers are not found for the given sum.");
+}
