@@ -1,0 +1,162 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+struct node{
+    struct node *left;
+    int key;
+    struct node *right;
+};
+
+struct node *create(int item)
+{
+    struct node *temp=(struct node*)malloc(sizeof(struct node));
+    temp->key=item;
+    temp->left=temp->right=NULL;
+    return temp; 
+}
+
+struct node *insert(struct node* root, int k)
+{
+    if(root == NULL)
+        return create(k);
+    if(k<=root->key)
+        root->left=insert(root->left,k);
+    else
+        root->right=insert(root->right,k);
+    return root;
+} 
+
+void inorder(struct node* root)
+{
+    if(root!=NULL)
+    {
+        inorder(root->left);
+        printf("%d",root->key);
+        inorder(root->right);
+    }
+    printf("\n\n");
+}
+
+void preorder(struct node *root)
+{
+    if(root!=NULL)
+    {
+        printf("%d",root->key);
+        preorder(root->left);
+        preorder(root->right);
+    }
+    printf("\n\n");
+}
+
+void postorder(struct node *root)
+{
+    if(root!=NULL)
+    {
+        postorder(root->left);
+        postorder(root->right);
+        printf("%d",root->key);
+    }
+    printf("\n\n");
+}
+
+struct node *search(struct node *root,int k)
+{
+    if(root==NULL||root->key==k)
+        return root;
+    if(root->key<k)
+        return search(root->right,k);
+    else
+        return search(root->right,k);
+}
+
+struct node *smallest(struct node *root)
+{
+    if(root==NULL||root->left==NULL)
+        return root;
+    else
+        return smallest(root->left);
+}
+
+struct node *largest(struct node *root)
+{
+    if(root==NULL||root->right==NULL)
+        return root;
+    else
+        return largest(root->right);
+}
+
+int height(struct node *root)
+{
+    if(root==NULL)
+        return 0;
+    else
+    {
+        int lh=height(root->left);
+        int rh=height(root->right);
+        if(lh>rh)
+            return(lh+1);
+        else
+            return (rh+1);
+    }
+}
+
+//driver code
+int main()
+{
+    struct node *root=NULL,*temp=NULL;
+    int flag=1,k;
+    while(flag==1)
+    {
+        printf("Enter the data:");
+        scanf("%d",&k);
+        root=insert(root,k);
+        printf("press 1 to input again and 0 to stop.");
+        scanf("%d",&flag);
+    }
+
+    printf("Enter the no.s to do the following functions\n 1.Insert an element again.\n2.To display in inorder format.\n3.To display in preorder format.\n4.To display in postorder format.\n5.To search an element.\n6.To find the value of the minimum element.\n7.To find the value of the maximum element.\n8.To find the height of the tree structure.\nEnter any other not to terminate the program.\n");
+    scanf("%d",&flag);
+    while(flag!=0) 
+    {
+        if(flag==1)
+        {
+            printf("Enter the data to be inserted");
+            scanf("%d",&k);
+            root=insert(root,k);
+        }
+        if(flag==2)
+            inorder(root);
+        if(flag==3)
+            preorder(root);
+        if(flag==4)
+            postorder(root);
+        if(flag==5)
+        {
+            int sh;
+            printf("Enter the data to be searched: ");
+            scanf("%d",&sh);
+            temp=search(root,sh);
+            if(temp==NULL)
+                printf("%d Not found\n\n",sh);
+            else
+                printf("Found %d\n\n",sh);
+        }
+        if(flag==6)
+        {
+            temp=smallest(root);
+            printf("The smallest element is: %d\n\n\n",temp->key);
+        }
+        if(flag==7)
+        {
+            temp=largest(root);
+            printf("The largest element is: %d\n\n\n",temp->key);
+        }
+        if(flag==8)
+        {
+            int result=height(root);
+            printf("The height of the tree data structure is:%d\n\n\n",result);
+        }
+        printf("Enter the no.s to do the folloeing functions\n 1.Insert an element again.\n2.To display in inorder format.\n3.To display in preorder format.\n4.To display in postorder format.\n5.To search an element.\n6.To find the value of the minimum element.\n7.To find the value of the maximum element.\n8.To find the height of the tree structure.\nEnter any other not to terminate the program.\n");
+        scanf("%d",&flag);
+    }   
+}
