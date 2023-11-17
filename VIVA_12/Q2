@@ -1,0 +1,84 @@
+#include<stdio.h>
+
+int main()
+{
+    int n,count=0,target;
+    printf("Enter the size of the array:");
+    scanf("%d",&n);
+    int arr[n];
+    printf("Enter the elements of the array:\n");
+    for (int i=0;i<n;i++)
+    {
+        scanf("%d",&arr[i]);
+    }
+    printf("Enter the target to be inserted:");
+    scanf("%d",&target);
+    for (int i=0;i<n;i++)
+    {
+        int sum=arr[i],counti=1;
+        while(sum<=target)
+        {
+            if(sum==target)
+            {
+                if(count==0)
+                {
+                    printf("Number of ways are :");
+                    printf("{");
+                    for(int k=0;k<counti;k++)
+                        printf("%d,",arr[i]);
+                    printf("}\n");
+                    count++;
+                }
+                else
+                {
+                    printf("{");
+                    for(int k=0;k<counti;k++)
+                        printf("%d,",arr[i]);
+                    printf("}\n");
+                    count++;
+                }
+            }
+            for(int j=i;j<n;j++)
+            {
+                if(arr[i]!=arr[j])
+                {
+                    int sum2=arr[j],countj=1;
+                    while((sum2+sum)<=target)
+                    {
+                        if((sum2+sum)==target&&countj>1)
+                        {
+                            printf("{");
+                            for(int k=0;k<counti;k++)
+                                printf("%d,",arr[i]);
+                            for(int k=0;k<countj;k++)
+                                printf("%d,",arr[j]);
+                            printf("}\n");
+                            count++;
+                        }
+                        sum2=sum2+arr[j];
+                        countj++;
+                    }
+                    if(sum+arr[j]==target)
+                    {
+                        printf("{");
+                        for(int k=0;k<counti;k++)
+                            printf("%d,",arr[i]);
+                        printf("%d,",arr[j]);
+                        printf("}\n");
+                        count++;
+                    }
+                }
+            }    
+            sum=sum+arr[i];
+            counti++;
+        }
+    }
+    if(count==0)
+    {
+        printf("No combinations found.");
+    }
+    else
+    {
+        printf("The total number of ways is:%d",count);
+    }
+}
