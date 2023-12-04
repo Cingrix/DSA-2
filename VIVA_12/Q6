@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Function to rearrange the array
+void rearrangeArray(int arr[], int size) {
+  for (int i = 1; i < size; i += 2) {
+    if (i > 0 && arr[i - 1] > arr[i]) {
+      // Swap arr[i] and arr[i-1]
+      int temp = arr[i];
+      arr[i] = arr[i - 1];
+      arr[i - 1] = temp;
+    }
+    if (i < size - 1 && arr[i + 1] > arr[i]) {
+      // Swap arr[i] and arr[i+1]
+      int temp = arr[i];
+      arr[i] = arr[i + 1];
+      arr[i + 1] = temp;
+    }
+  }
+}
+
+int main() {
+  // Get the size of the array from the user
+  int size;
+  printf("Enter the size of the array: ");
+  scanf("%d", &size);
+
+  // Allocate memory for the array
+  int* arr = (int*)malloc(size * sizeof(int));
+
+  // Get the elements of the array from the user
+  printf("Enter the elements of the array:\n");
+  for (int i = 0; i < size; i++) {
+    scanf("%d", &arr[i]);
+  }
+
+  // Rearrange the array
+  rearrangeArray(arr, size);
+
+  // Print the rearranged array
+  printf("Rearranged array: ");
+  for (int i = 0; i < size; i++) {
+    printf("%d ", arr[i]);
+  }
+  printf("\n");
+
+  // Free the memory allocated for the array
+  free(arr);
+
+  return 0;
+}
