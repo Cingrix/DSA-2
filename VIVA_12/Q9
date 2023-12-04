@@ -1,0 +1,51 @@
+#include <stdio.h>
+// Function to move zeros to the end of the array
+void moveZeros(int arr[], int size) 
+{
+    int nonZeroIndex = 0;
+    // Traverse the array and move non-zero elements to the front
+    for (int i = 0; i < size; i++) 
+    {    
+        if (arr[i] != 0) 
+        {
+            arr[nonZeroIndex] = arr[i];
+            nonZeroIndex++;
+        }   
+    }
+    // Fill the remaining elements with zeros
+    for (int i = nonZeroIndex; i < size; i++) 
+    {
+        arr[i] = 0;
+    }
+}
+
+int main() 
+{
+    // Test case
+    int size;
+    printf("Enter the size of the array: ");
+    scanf("%d", &size);
+
+    // Allocate memory for the array
+    int* arr = (int*)malloc(size * sizeof(int));
+
+    // Get the elements of the array from the user
+    printf("Enter the elements of the array:\n");
+    for (int i = 0; i < size; i++) 
+    {
+        scanf("%d", &arr[i]);
+    }
+    
+    // Move zeros to the end
+    moveZeros(arr, size);
+    
+    // Print the modified array
+    printf("Output: {");
+    for (int i = 0; i < size; i++) 
+    {
+        printf("%d", arr[i]);
+        if (i < size - 1) printf(", ");
+    }
+    printf("}\n");
+    return 0;
+}
