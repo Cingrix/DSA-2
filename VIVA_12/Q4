@@ -1,0 +1,72 @@
+#include <stdio.h>
+
+// Structure to represent an interval
+struct Interval {
+    int start;
+    int end;
+};
+
+// Function to compare intervals for sorting
+void swapIntervals(struct Interval intervals[], int i, int j) {
+    struct Interval temp = intervals[i];
+    intervals[i] = intervals[j];
+    intervals[j] = temp;
+}
+
+// Function to merge overlapping intervals and print non-overlapping intervals
+void mergeAndPrint(struct Interval intervals[], int n) {
+    // Check if the array of intervals is empty or has only one interval
+    if (n <= 0) {
+        printf("No intervals to merge or print.\n");
+        return;
+    }
+
+    // Sort the intervals based on their start values
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (intervals[j].start > intervals[j + 1].start) {
+                // Swap the intervals if they are not in order
+                swapIntervals(intervals, j, j + 1);
+            }
+        }
+    }
+
+    // Merge overlapping intervals
+    int mergedIndex = 0;
+    for (int i = 1; i < n; i++) {
+        if (intervals[mergedIndex].end >= intervals[i].start) {
+            // Merge overlapping intervals
+            intervals[mergedIndex].end = (intervals[mergedIndex].end > intervals[i].end) ? intervals[mergedIndex].end : intervals[i].end;
+        } else {
+            // Move to the next position for the next interval
+            mergedIndex++;
+            intervals[mergedIndex] = intervals[i];
+        }
+    }
+
+    // Print the non-overlapping intervals
+    printf("Non-overlapping Intervals: ");
+    for (int i = 0; i <= mergedIndex; i++) {
+        printf("[%d, %d] ", intervals[i].start, intervals[i].end);
+    }
+    printf("\n");
+}
+
+int main() {
+    // Input the number of intervals
+    int n;
+    printf("Enter the number of intervals: ");
+    scanf("%d", &n);
+
+    // Input the intervals
+    struct Interval intervals[n];
+    printf("Enter the intervals (start and end separated by space):\n");
+    for (int i = 0; i < n; i++) {
+        scanf("%d %d", &intervals[i].start, &intervals[i].end);
+    }
+
+    // Call the mergeAndPrint function
+    mergeAndPrint(intervals, n);
+
+    return 0;
+}
