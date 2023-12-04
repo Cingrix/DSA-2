@@ -1,0 +1,120 @@
+#include <stdio.h>
+#include <stdlib.h>
+void replaceZeros(int arr1[], int arr2[], int size1, int size2) {
+    int i, j;
+
+    for (i = 0; i < size1; i++) {
+        if (arr1[i] == 0) {
+            for (j = 0; j < size2; j++) {
+                if (arr2[j] != 0) {
+                    arr1[i] = arr2[j];
+                    arr2[j] = 0;
+                    break;
+                }
+            }
+        }
+    }
+}
+
+void merge(int arr[], int l, int m, int r)
+{
+    int i, j, k;
+    int n1 = m - l + 1;
+    int n2 = r - m;
+    int L[n1], R[n2];
+
+    for (i = 0; i < n1; i++)
+        L[i] = arr[l + i];
+    for (j = 0; j < n2; j++)
+        R[j] = arr[m +  + j];
+
+    i = 0;
+    j = 0;
+    k = l;
+
+    
+while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) {
+            arr[k] = L[i];
+            i++;
+        } else {
+            arr[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+
+    while (i < n1) {
+        arr[k] = L[i];
+        i++;
+        k++;
+    }
+
+    while (j < n2) {
+        arr[k] = R[j];
+        j++;
+        k++;
+    }
+}
+
+void mergeSort(int arr[], int l, int r)
+{
+    if (l < r) {
+        int m = l + (r - l) / 2;
+        mergeSort(arr, l, m);
+        mergeSort(arr, m + 1, r);
+        merge(arr, l, m, r);
+    }
+}
+
+int main() {
+   int size1;
+  printf("Enter the size of the array: ");
+  scanf("%d", &size1);
+
+  // Allocate memory for the array
+  int* arr1 = (int*)malloc(size1 * sizeof(int));
+
+  // Get the elements of the array from the user
+  printf("Enter the elements of the array:\n");
+  for (int i = 0; i < size1; i++) {
+    scanf("%d", &arr1[i]);
+  }
+
+
+    int size2;
+  printf("Enter the size of the array: ");
+  scanf("%d", &size2);
+
+  // Allocate memory for the array
+  int* arr2 = (int*)malloc(size2 * sizeof(int));
+
+  // Get the elements of the array from the user
+  printf("Enter the elements of the array:\n");
+  for (int i = 0; i < size2; i++) {
+    scanf("%d", &arr2[i]);
+  }
+
+    replaceZeros(arr1, arr2, size1, size2);
+
+    //mergeSort(arr1, 0, size1 - 1);
+    int temp=0;
+    for(int i=0;i<size1;i++)
+    {
+        for(int j=0;j<size1;j++)
+        {
+            if(arr1[i]<arr1[j])
+            {
+                temp=arr1[i];
+                arr1[i]=arr1[j];
+                arr1[j]=temp;
+            }
+        }
+    }
+    printf("Modified Array: ");
+    for (int i = 0; i < size1; i++) {
+        printf("%d ", arr1[i]);
+    }
+
+    return 0;
+}
